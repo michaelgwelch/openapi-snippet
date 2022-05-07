@@ -142,10 +142,16 @@ const createHarParameterObjects = function (
         objects.push({ name, value: value.join(separator) });
       }
     } else if (value && typeof value === 'object') {
-      if (explode) {
+      if (style === 'deepObject') {
         objects.push(
           ...Object.keys(value).map((key) => {
-            return { name: key, value: value[key] };
+            return { name: `${name}[${key}]`, value: value[key] + '' };
+          })
+        );
+      } else if (explode) {
+        objects.push(
+          ...Object.keys(value).map((key) => {
+            return { name: key, value: value[key] + '' };
           })
         );
       } else {

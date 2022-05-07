@@ -794,3 +794,32 @@ test('/users{?id} with id=[3,4,5], pipeDelimited', function (t) {
   t.deepEqual(actual, expected);
   t.end();
 });
+
+// DeepObject
+// Spec doesn't say what to do if explode false. We just assume deepOject ignores explode
+// as no alternative serialization is defined when explode is false.
+
+test('deepObject with id={"role": "admin", "firstName": "Alex"}', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'query',
+    style: 'deepObject',
+  };
+
+  const expected = [
+    {
+      name: 'id[role]',
+      value: 'admin',
+    },
+    {
+      name: 'id[firstName]',
+      value: 'Alex',
+    },
+  ];
+  const actual = createHarParameterObjects(parameter, {
+    role: 'admin',
+    firstName: 'Alex',
+  });
+  t.deepEqual(actual, expected);
+  t.end();
+});
