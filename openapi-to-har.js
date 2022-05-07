@@ -114,35 +114,25 @@ const getParamId = function (style, name) {
 };
 
 /**
- * If `style` is undefined then get the default style for the location.
- * @param {*} style
+ * Returns the default style for the location per OpenAPI 3.0.3 spec
  * @param {*} location
  * @returns
  */
-function getDefaultStyleForLocation(style, location) {
-  if (typeof style === 'undefined') {
-    if (location === 'path') {
-      style = 'simple';
-    } else if (location === 'query') {
-      style = 'form';
-    }
+function getDefaultStyleForLocation(location) {
+  if (location === 'path' || location === 'header') {
+    return 'simple';
+  } else if (location === 'query' || location === 'cookie') {
+    return 'form';
   }
-  return style;
 }
 
 /**
- * If `explode` is undefined then get the default value of `explode` for the given style.
- * @param {*} explode
+ * Returns the default value of explode for the given style per OpenAPI 3.0.3 spec
  * @param {*} style
  * @returns
  */
-function getDefaultExplodeForStyle(explode, style) {
-  if (typeof explode === 'undefined') {
-    if (style === 'form') {
-      explode = true;
-    }
-  }
-  return explode;
+function getDefaultExplodeForStyle(style) {
+  return style === 'form';
 }
 
 /**
@@ -202,8 +192,8 @@ const createHarParameterObjects = function (
   }
 
   const objects = [];
-  style = getDefaultStyleForLocation(style, location);
-  explode = getDefaultExplodeForStyle(explode, style);
+  style = style ?? getDefaultStyleForLocation(location);
+  explode = explode ?? getDefaultExplodeForStyle(style);
 
   if (location === 'query') {
     const separator = getArrayElementSeparator(style);
