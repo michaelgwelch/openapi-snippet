@@ -119,15 +119,24 @@ const createHarParameterObjects = function (
   if (location === 'path') {
     let prefix = '';
     let separator = ',';
+    let paramId = '';
+
     if (style === 'label') {
       prefix = '.';
       separator = '.';
+    } else if (style === 'matrix') {
+      prefix = `;`;
+      separator = ';';
+      paramId = `${name}=`;
     }
     if (Array.isArray(value)) {
       if (explode) {
-        objects.push({ name, value: prefix + value.join(separator) });
+        objects.push({
+          name,
+          value: prefix + paramId + value.join(separator + paramId),
+        });
       } else {
-        objects.push({ name, value: prefix + value + '' });
+        objects.push({ name, value: prefix + paramId + value + '' });
       }
     } else if (value && typeof value === 'object') {
       if (explode) {
@@ -145,12 +154,13 @@ const createHarParameterObjects = function (
           name,
           value:
             prefix +
+            paramId +
             Object.keys(value).map((key) => `${key},${value[key]}`) +
             '',
         });
       }
     } else {
-      objects.push({ name, value: prefix + value + '' });
+      objects.push({ name, value: prefix + paramId + value + '' });
     }
   }
 

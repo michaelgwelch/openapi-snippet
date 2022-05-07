@@ -331,15 +331,15 @@ test('Testing the application/x-www-form-urlencoded example case', function (t) 
 // Tests of createHarParameterObject
 
 // First a set of path parameter tests from here: https://swagger.io/docs/specification/serialization/#path
-// The test cases use URI Template
-test('test that style and explode default correctly', function (t) {
+
+test('test that style and explode default correctly (to "simple" and "false") when neither is specified', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
   };
 
   const expected = [{ name: 'id', value: '1,2,3' }];
-  const actual = createHarParameterObjects(parameter, 5);
+  const actual = createHarParameterObjects(parameter, [1, 2, 3]);
   t.deepEqual(actual, expected);
   t.end();
 });
@@ -520,6 +520,98 @@ test('/users/{.id*} with id= {"role": "admin", "firstName": "Alex"}', function (
   };
 
   const expected = [{ name: 'id', value: '.role=admin.firstName=Alex' }];
+  const actual = createHarParameterObjects(parameter, {
+    role: 'admin',
+    firstName: 'Alex',
+  });
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+// Matrix style tests
+
+test('/users/{;id} with id=5', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+    style: 'matrix',
+    explode: false,
+  };
+
+  const expected = [{ name: 'id', value: ';id=5' }];
+  const actual = createHarParameterObjects(parameter, 5);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users/{;id} with id=[3,4,5]', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+    style: 'matrix',
+    explode: false,
+  };
+
+  const expected = [{ name: 'id', value: ';id=3,4,5' }];
+  const actual = createHarParameterObjects(parameter, [3, 4, 5]);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users/{;id} with id= {"role": "admin", "firstName": "Alex"}', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+    style: 'matrix',
+    explode: false,
+  };
+
+  const expected = [{ name: 'id', value: ';id=role,admin,firstName,Alex' }];
+  const actual = createHarParameterObjects(parameter, {
+    role: 'admin',
+    firstName: 'Alex',
+  });
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users/{;id*} with id=5', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+    style: 'matrix',
+    explode: true,
+  };
+
+  const expected = [{ name: 'id', value: ';id=5' }];
+  const actual = createHarParameterObjects(parameter, 5);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users/{;id*} with id=[3,4,5]', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+    style: 'matrix',
+    explode: true,
+  };
+
+  const expected = [{ name: 'id', value: ';id=3;id=4;id=5' }];
+  const actual = createHarParameterObjects(parameter, [3, 4, 5]);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users/{;id*} with id= {"role": "admin", "firstName": "Alex"}', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+    style: 'matrix',
+    explode: true,
+  };
+
+  const expected = [{ name: 'id', value: ';role=admin;firstName=Alex' }];
   const actual = createHarParameterObjects(parameter, {
     role: 'admin',
     firstName: 'Alex',
