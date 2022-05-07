@@ -128,6 +128,8 @@ const createHarParameterObjects = function (
     let separator = ',';
     if (style === 'spaceDelimited') {
       separator = '%20';
+    } else if (style === 'pipeDelimited') {
+      separator = '|';
     }
     if (Array.isArray(value)) {
       if (explode) {

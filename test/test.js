@@ -759,3 +759,38 @@ test('/users{?id} with id=[3,4,5], spaceDelimited', function (t) {
   t.deepEqual(actual, expected);
   t.end();
 });
+
+// Pipe Delimited Tests
+// Note: There are less scenarios for this and no special URI Template
+
+test('/users{?id*} with id=[3,4,5], pipeDelimited', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'query',
+    style: 'pipeDelimited',
+    explode: true,
+  };
+
+  const expected = [
+    { name: 'id', value: '3' },
+    { name: 'id', value: '4' },
+    { name: 'id', value: '5' },
+  ];
+  const actual = createHarParameterObjects(parameter, [3, 4, 5]);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users{?id} with id=[3,4,5], pipeDelimited', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'query',
+    style: 'pipeDelimited',
+    explode: false,
+  };
+
+  const expected = [{ name: 'id', value: '3|4|5' }];
+  const actual = createHarParameterObjects(parameter, [3, 4, 5]);
+  t.deepEqual(actual, expected);
+  t.end();
+});
