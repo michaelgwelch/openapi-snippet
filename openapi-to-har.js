@@ -75,6 +75,89 @@ const createHar = function (openApi, path, method, queryParamValues) {
 };
 
 /**
+ * @typedef {object} HarParameterObject - An object that describes a parameter in a HAR
+ * @property {string} name - The name of the parameter
+ * @property {string} value - The value of the parameter
+ */
+
+/**
+ * Returns an array of HAR parameter objects for the specified parameter and value.
+ *
+ * While it is quite often that a singleton array is returned, when `explode` is
+ * true multiple objects may be returned.
+ *
+ * See https://swagger.io/docs/specification/serialization for the logic of how value of
+ * the return objects are calculated
+ *
+ * @param {Object} parameter  - An OpenAPI Parameter object
+ * @param {string} name       - The name of the parameter
+ * @param {string} in         - One of the values: `path`, `query`, `header`, `cookie`
+ * @param {string} [style]    - Optional: One of the OpenAPI styles {e.g. form, simple, label, matrix, ...}
+ * @param {boolean} [explode] - Optional: Whether or not arrays and objects should be exploded
+ * @param {*}      value      - The value to use in the query string object. Since `parameter`
+ *                              has many properties that could be a candidate for the value this
+ *                              parameter is used to explicitly state which value should be used.
+ * @return {HarParameterObject[]} - An array of query string objects
+ */
+const createHarParameterObjects = function (
+  { name, in: location, style, explode },
+  value
+) {
+  const objects = [];
+  if (typeof style === 'undefined') {
+    if (location === 'path') {
+      style = 'simple';
+    }
+  }
+
+  if (typeof explode === undefined) {
+    if (style === 'form') {
+      explode = true;
+    }
+  }
+
+  if (location === 'path') {
+    let prefix = '';
+    let separator = ',';
+    if (style === 'label') {
+      prefix = '.';
+      separator = '.';
+    }
+    if (Array.isArray(value)) {
+      if (explode) {
+        objects.push({ name, value: prefix + value.join(separator) });
+      } else {
+        objects.push({ name, value: prefix + value + '' });
+      }
+    } else if (value && typeof value === 'object') {
+      if (explode) {
+        objects.push({
+          name,
+          value:
+            prefix +
+            Object.keys(value)
+              .map((key) => `${key}=${value[key]}`)
+              .join(separator) +
+            '',
+        });
+      } else {
+        objects.push({
+          name,
+          value:
+            prefix +
+            Object.keys(value).map((key) => `${key},${value[key]}`) +
+            '',
+        });
+      }
+    } else {
+      objects.push({ name, value: prefix + value + '' });
+    }
+  }
+
+  return objects;
+};
+
+/**
  * Get the payload definition for the given endpoint (path + method) from the
  * given OAI specification. References within the payload definition are
  * resolved.
@@ -552,4 +635,5 @@ const resolveRef = function (openApi, ref) {
 module.exports = {
   getAll: openApiToHarList,
   getEndpoint: createHar,
+  createHarParameterObjects,
 };

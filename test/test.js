@@ -3,6 +3,8 @@
 const test = require('tape');
 const OpenAPISnippets = require('../index');
 
+const { createHarParameterObjects } = require('../openapi-to-har');
+
 const InstagramOpenAPI = require('./instagram_swagger.json');
 const BloggerOpenAPI = require('./blogger_swagger.json');
 const GitHubOpenAPI = require('./github_swagger.json');
@@ -323,5 +325,205 @@ test('Testing the application/x-www-form-urlencoded example case', function (t) 
   const snippet = result.snippets[0].content;
   t.match(snippet, /.*--data 'id=id\+example\+value'.*/);
   t.match(snippet, /.*--data 'secret=secret\+example\+value'.*/);
+  t.end();
+});
+
+// Tests of createHarParameterObject
+
+// First a set of path parameter tests from here: https://swagger.io/docs/specification/serialization/#path
+// The test cases use URI Template
+test('test that style and explode default correctly', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+  };
+
+  const expected = [{ name: 'id', value: '1,2,3' }];
+  const actual = createHarParameterObjects(parameter, 5);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+// Simple style tests:
+
+test('/users/{id} with id=5', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+    style: 'simple',
+    explode: false,
+  };
+
+  const expected = [{ name: 'id', value: '5' }];
+  const actual = createHarParameterObjects(parameter, 5);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users/{id} with id=[3,4,5]', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+    style: 'simple',
+    explode: false,
+  };
+
+  const expected = [{ name: 'id', value: '3,4,5' }];
+  const actual = createHarParameterObjects(parameter, [3, 4, 5]);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users/{id} with id= {"role": "admin", "firstName": "Alex"}', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+    style: 'simple',
+    explode: false,
+  };
+
+  const expected = [{ name: 'id', value: 'role,admin,firstName,Alex' }];
+  const actual = createHarParameterObjects(parameter, {
+    role: 'admin',
+    firstName: 'Alex',
+  });
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users/{id*} with id=5', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+    style: 'simple',
+    explode: true,
+  };
+
+  const expected = [{ name: 'id', value: '5' }];
+  const actual = createHarParameterObjects(parameter, 5);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users/{id*} with id=[3,4,5]', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+    style: 'simple',
+    explode: true,
+  };
+
+  const expected = [{ name: 'id', value: '3,4,5' }];
+  const actual = createHarParameterObjects(parameter, [3, 4, 5]);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users/{id*} with id= {"role": "admin", "firstName": "Alex"}', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+    style: 'simple',
+    explode: true,
+  };
+
+  const expected = [{ name: 'id', value: 'role=admin,firstName=Alex' }];
+  const actual = createHarParameterObjects(parameter, {
+    role: 'admin',
+    firstName: 'Alex',
+  });
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+// Label style tests
+
+test('/users/{.id} with id=5', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+    style: 'label',
+    explode: false,
+  };
+
+  const expected = [{ name: 'id', value: '.5' }];
+  const actual = createHarParameterObjects(parameter, 5);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users/{.id} with id=[3,4,5]', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+    style: 'label',
+    explode: false,
+  };
+
+  const expected = [{ name: 'id', value: '.3,4,5' }];
+  const actual = createHarParameterObjects(parameter, [3, 4, 5]);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users/{.id} with id= {"role": "admin", "firstName": "Alex"}', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+    style: 'label',
+    explode: false,
+  };
+
+  const expected = [{ name: 'id', value: '.role,admin,firstName,Alex' }];
+  const actual = createHarParameterObjects(parameter, {
+    role: 'admin',
+    firstName: 'Alex',
+  });
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users/{.id*} with id=5', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+    style: 'label',
+    explode: true,
+  };
+
+  const expected = [{ name: 'id', value: '.5' }];
+  const actual = createHarParameterObjects(parameter, 5);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users/{.id*} with id=[3,4,5]', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+    style: 'label',
+    explode: true,
+  };
+
+  const expected = [{ name: 'id', value: '.3.4.5' }];
+  const actual = createHarParameterObjects(parameter, [3, 4, 5]);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users/{.id*} with id= {"role": "admin", "firstName": "Alex"}', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'path',
+    style: 'label',
+    explode: true,
+  };
+
+  const expected = [{ name: 'id', value: '.role=admin.firstName=Alex' }];
+  const actual = createHarParameterObjects(parameter, {
+    role: 'admin',
+    firstName: 'Alex',
+  });
+  t.deepEqual(actual, expected);
   t.end();
 });
