@@ -374,7 +374,7 @@ test('/users/{id*} with id=[3,4,5]', function (t) {
   t.end();
 });
 
-test('/users/{id*} with id= {"role": "admin", "firstName": "Alex"}', function (t) {
+test('/users/{id*} with id= {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -382,10 +382,11 @@ test('/users/{id*} with id= {"role": "admin", "firstName": "Alex"}', function (t
     explode: true,
   };
 
-  const expected = [{ name: 'id', value: 'role=admin,firstName=Alex' }];
+  const expected = [{ name: 'id', value: 'role=admin,firstName=Alex,age=34' }];
   const actual = createHarParameterObjects(parameter, {
     role: 'admin',
     firstName: 'Alex',
+    age: 34,
   });
   t.deepEqual(actual, expected);
   t.end();
@@ -419,7 +420,7 @@ test('/users/{id} with id=[3,4,5]', function (t) {
   t.end();
 });
 
-test('/users/{id} with id= {"role": "admin", "firstName": "Alex"}', function (t) {
+test('/users/{id} with id= {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -427,10 +428,11 @@ test('/users/{id} with id= {"role": "admin", "firstName": "Alex"}', function (t)
     explode: false,
   };
 
-  const expected = [{ name: 'id', value: 'role,admin,firstName,Alex' }];
+  const expected = [{ name: 'id', value: 'role,admin,firstName,Alex,age,34' }];
   const actual = createHarParameterObjects(parameter, {
     role: 'admin',
     firstName: 'Alex',
+    age: 34,
   });
   t.deepEqual(actual, expected);
   t.end();
@@ -466,7 +468,7 @@ test('/users/{.id*} with id=[3,4,5]', function (t) {
   t.end();
 });
 
-test('/users/{.id*} with id= {"role": "admin", "firstName": "Alex"}', function (t) {
+test('/users/{.id*} with id= {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -474,10 +476,11 @@ test('/users/{.id*} with id= {"role": "admin", "firstName": "Alex"}', function (
     explode: true,
   };
 
-  const expected = [{ name: 'id', value: '.role=admin.firstName=Alex' }];
+  const expected = [{ name: 'id', value: '.role=admin.firstName=Alex.age=34' }];
   const actual = createHarParameterObjects(parameter, {
     role: 'admin',
     firstName: 'Alex',
+    age: 34,
   });
   t.deepEqual(actual, expected);
   t.end();
@@ -511,7 +514,7 @@ test('/users/{.id} with id=[3,4,5]', function (t) {
   t.end();
 });
 
-test('/users/{.id} with id= {"role": "admin", "firstName": "Alex"}', function (t) {
+test('/users/{.id} with id= {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -519,10 +522,11 @@ test('/users/{.id} with id= {"role": "admin", "firstName": "Alex"}', function (t
     explode: false,
   };
 
-  const expected = [{ name: 'id', value: '.role,admin,firstName,Alex' }];
+  const expected = [{ name: 'id', value: '.role,admin,firstName,Alex,age,34' }];
   const actual = createHarParameterObjects(parameter, {
     role: 'admin',
     firstName: 'Alex',
+    age: 34,
   });
   t.deepEqual(actual, expected);
   t.end();
@@ -558,7 +562,7 @@ test('/users/{;id*} with id=[3,4,5]', function (t) {
   t.end();
 });
 
-test('/users/{;id*} with id= {"role": "admin", "firstName": "Alex"}', function (t) {
+test('/users/{;id*} with id= {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -566,10 +570,11 @@ test('/users/{;id*} with id= {"role": "admin", "firstName": "Alex"}', function (
     explode: true,
   };
 
-  const expected = [{ name: 'id', value: ';role=admin;firstName=Alex' }];
+  const expected = [{ name: 'id', value: ';role=admin;firstName=Alex;age=34' }];
   const actual = createHarParameterObjects(parameter, {
     role: 'admin',
     firstName: 'Alex',
+    age: 34,
   });
   t.deepEqual(actual, expected);
   t.end();
@@ -603,7 +608,7 @@ test('/users/{;id} with id=[3,4,5]', function (t) {
   t.end();
 });
 
-test('/users/{;id} with id= {"role": "admin", "firstName": "Alex"}', function (t) {
+test('/users/{;id} with id= {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -611,10 +616,13 @@ test('/users/{;id} with id= {"role": "admin", "firstName": "Alex"}', function (t
     explode: false,
   };
 
-  const expected = [{ name: 'id', value: ';id=role,admin,firstName,Alex' }];
+  const expected = [
+    { name: 'id', value: ';id=role,admin,firstName,Alex,age,34' },
+  ];
   const actual = createHarParameterObjects(parameter, {
     role: 'admin',
     firstName: 'Alex',
+    age: 34,
   });
   t.deepEqual(actual, expected);
   t.end();
@@ -656,7 +664,7 @@ test('/users{?id*} with id=[3,4,5]', function (t) {
   t.end();
 });
 
-test('/users{?id*} with id={"role": "admin", "firstName": "Alex"}', function (t) {
+test('/users{?id*} with id={"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
   const parameter = {
     name: 'id',
     in: 'query',
@@ -667,10 +675,12 @@ test('/users{?id*} with id={"role": "admin", "firstName": "Alex"}', function (t)
   const expected = [
     { name: 'role', value: 'admin' },
     { name: 'firstName', value: 'Alex' },
+    { name: 'age', value: '34' },
   ];
   const actual = createHarParameterObjects(parameter, {
     role: 'admin',
     firstName: 'Alex',
+    age: 34,
   });
   t.deepEqual(actual, expected);
   t.end();
@@ -704,7 +714,7 @@ test('/users{?id} with id=[3,4,5]', function (t) {
   t.end();
 });
 
-test('/users{?id} with id={"role": "admin", "firstName": "Alex"}', function (t) {
+test('/users{?id} with id={"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
   const parameter = {
     name: 'id',
     in: 'query',
@@ -712,10 +722,11 @@ test('/users{?id} with id={"role": "admin", "firstName": "Alex"}', function (t) 
     explode: false,
   };
 
-  const expected = [{ name: 'id', value: 'role,admin,firstName,Alex' }];
+  const expected = [{ name: 'id', value: 'role,admin,firstName,Alex,age,34' }];
   const actual = createHarParameterObjects(parameter, {
     role: 'admin',
     firstName: 'Alex',
+    age: 34,
   });
   t.deepEqual(actual, expected);
   t.end();
@@ -799,7 +810,7 @@ test('/users{?id} with id=[3,4,5], pipeDelimited', function (t) {
 // Spec doesn't say what to do if explode false. We just assume deepOject ignores explode
 // as no alternative serialization is defined when explode is false.
 
-test('deepObject with id={"role": "admin", "firstName": "Alex"}', function (t) {
+test('deepObject with id={"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
   const parameter = {
     name: 'id',
     in: 'query',
@@ -815,10 +826,15 @@ test('deepObject with id={"role": "admin", "firstName": "Alex"}', function (t) {
       name: 'id[firstName]',
       value: 'Alex',
     },
+    {
+      name: 'id[age]',
+      value: '34',
+    },
   ];
   const actual = createHarParameterObjects(parameter, {
     role: 'admin',
     firstName: 'Alex',
+    age: 34,
   });
   t.deepEqual(actual, expected);
   t.end();
