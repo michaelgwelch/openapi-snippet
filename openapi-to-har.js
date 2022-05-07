@@ -284,8 +284,6 @@ const createHarParameterObjects = function (
         });
       }
     }
-  } else {
-    objects.push({ name, value });
   }
 
   return objects;

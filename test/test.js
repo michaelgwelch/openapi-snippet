@@ -969,3 +969,86 @@ test('Header: Test that style and explode default to simple/false when not provi
   t.deepEqual(actual, expected);
   t.end();
 });
+
+//// Cookie Parameters https://swagger.io/docs/specification/serialization/#cookie
+
+test("Cookie: Test that it doesn't throw an error if style and explode are missing", function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'cookie',
+  };
+
+  let expected = [{ name: 'id', value: '5' }];
+  let actual = createHarParameterObjects(parameter, 5);
+
+  t.deepEqual(actual, expected);
+
+  // At the time of writing the spec doesn't actually show any test cases for exploded arrays or objects
+  // so I assume they are not "legal"
+
+  t.end();
+});
+
+test('Cookie: id = 5', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'cookie',
+    style: 'form',
+    explode: true,
+  };
+
+  const expected = [{ name: 'id', value: '5' }];
+  const actual = createHarParameterObjects(parameter, 5);
+
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('Cookie: id={id} with id = 5', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'cookie',
+    style: 'form',
+    explode: false,
+  };
+
+  const expected = [{ name: 'id', value: '5' }];
+  const actual = createHarParameterObjects(parameter, 5);
+
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('Cookie: id={id} with id = [3,4,5]', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'cookie',
+    style: 'form',
+    explode: false,
+  };
+
+  const expected = [{ name: 'id', value: '3,4,5' }];
+  const actual = createHarParameterObjects(parameter, [3, 4, 5]);
+
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('Cookie: id={id} with id = {role: "admin", firstName: "Alex", age: 34}', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'cookie',
+    style: 'form',
+    explode: false,
+  };
+
+  const expected = [{ name: 'id', value: 'role,admin,firstName,Alex,age,34' }];
+  const actual = createHarParameterObjects(parameter, {
+    role: 'admin',
+    firstName: 'Alex',
+    age: 34,
+  });
+
+  t.deepEqual(actual, expected);
+  t.end();
+});
