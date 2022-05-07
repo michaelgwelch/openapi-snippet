@@ -130,22 +130,22 @@ const getParamId = function (style, name) {
  * @param {*} location
  * @returns
  */
-function getDefaultStyleForLocation(location) {
+const getDefaultStyleForLocation = function (location) {
   if (location === 'path' || location === 'header') {
     return 'simple';
   } else if (location === 'query' || location === 'cookie') {
     return 'form';
   }
-}
+};
 
 /**
  * Returns the default value of explode for the given style per OpenAPI 3.0.3 spec
  * @param {*} style
  * @returns
  */
-function getDefaultExplodeForStyle(style) {
+const getDefaultExplodeForStyle = function (style) {
   return style === 'form';
-}
+};
 
 /**
  * Returns the correct array element separator for unexploded query parameters
@@ -154,7 +154,7 @@ function getDefaultExplodeForStyle(style) {
  * @param {*} style
  * @returns
  */
-function getArrayElementSeparator(style) {
+const getArrayElementSeparator = function (style) {
   let separator = ',';
   if (style === 'spaceDelimited') {
     separator = '%20';
@@ -162,7 +162,7 @@ function getArrayElementSeparator(style) {
     separator = '|';
   }
   return separator;
-}
+};
 
 /**
  * Returns a string representation of `obj`. Each key value pair is separated by
@@ -176,11 +176,15 @@ function getArrayElementSeparator(style) {
  * objectJoin({ firstName: 'Alex', age: 34 }, '=', ',')
  * @returns
  */
-function objectJoin(obj, keyValueSeparator = ',', pairSeparator = ',') {
+const objectJoin = function (
+  obj,
+  keyValueSeparator = ',',
+  pairSeparator = ','
+) {
   return Object.entries(obj)
     .map(([k, v]) => `${k}${keyValueSeparator}${v}`)
     .join(pairSeparator);
-}
+};
 
 /**
  * @typedef {object} HarParameterObject - An object that describes a parameter in a HAR
@@ -226,7 +230,7 @@ const createHarParameterObjects = function (
   style = style ?? getDefaultStyleForLocation(location);
   explode = explode ?? getDefaultExplodeForStyle(style);
 
-  if (location === 'query') {
+  if (location === 'query' || location === 'cookie') {
     const separator = getArrayElementSeparator(style);
     if (Array.isArray(value)) {
       if (explode) {
