@@ -210,20 +210,20 @@ const createHarParameterObjects = function (
     } else if (value && typeof value === 'object') {
       if (style === 'deepObject') {
         objects.push(
-          ...Object.keys(value).map((key) => {
-            return { name: `${name}[${key}]`, value: value[key] + '' };
+          ...Object.entries(value).map(([k, v]) => {
+            return { name: `${name}[${k}]`, value: v + '' };
           })
         );
       } else if (explode) {
         objects.push(
-          ...Object.keys(value).map((key) => {
-            return { name: key, value: value[key] + '' };
+          ...Object.entries(value).map(([k, v]) => {
+            return { name: k, value: v + '' };
           })
         );
       } else {
         objects.push({
           name,
-          value: Object.keys(value).map((key) => `${key},${value[key]}`) + '',
+          value: Object.entries(value).map(([k, v]) => `${k},${v}`) + '',
         });
       }
     }
@@ -252,10 +252,9 @@ const createHarParameterObjects = function (
           name,
           value:
             prefix +
-            Object.keys(value)
-              .map((key) => `${key}=${value[key]}`)
-              .join(separator) +
-            '',
+            Object.entries(value)
+              .map(([k, v]) => `${k}=${v}`)
+              .join(separator),
         });
       } else {
         objects.push({
@@ -263,8 +262,7 @@ const createHarParameterObjects = function (
           value:
             prefix +
             paramId +
-            Object.keys(value).map((key) => `${key},${value[key]}`) +
-            '',
+            Object.entries(value).map(([k, v]) => `${k},${v}`),
         });
       }
     }
