@@ -332,7 +332,7 @@ test('Testing the application/x-www-form-urlencoded example case', function (t) 
 
 // First a set of path parameter tests from here: https://swagger.io/docs/specification/serialization/#path
 
-test('test that style and explode default correctly (to "simple" and "false") when neither is specified for path', function (t) {
+test('Path: test that style and explode default correctly (to "simple" and "false") when neither is specified for path', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -346,7 +346,7 @@ test('test that style and explode default correctly (to "simple" and "false") wh
 
 // Simple style tests:
 
-test('/users/{id*} with id=5', function (t) {
+test('Path: /users/{id*} with id=5', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -360,7 +360,7 @@ test('/users/{id*} with id=5', function (t) {
   t.end();
 });
 
-test('/users/{id*} with id=[3,4,5]', function (t) {
+test('Path: /users/{id*} with id=[3,4,5]', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -374,7 +374,7 @@ test('/users/{id*} with id=[3,4,5]', function (t) {
   t.end();
 });
 
-test('/users/{id*} with id= {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
+test('Path: /users/{id*} with id= {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -392,7 +392,7 @@ test('/users/{id*} with id= {"role": "admin", "firstName": "Alex", "age": 34}', 
   t.end();
 });
 
-test('/users/{id} with id=5', function (t) {
+test('Path: /users/{id} with id=5', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -406,7 +406,7 @@ test('/users/{id} with id=5', function (t) {
   t.end();
 });
 
-test('/users/{id} with id=[3,4,5]', function (t) {
+test('Path: /users/{id} with id=[3,4,5]', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -420,7 +420,7 @@ test('/users/{id} with id=[3,4,5]', function (t) {
   t.end();
 });
 
-test('/users/{id} with id= {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
+test('Path: /users/{id} with id= {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -440,7 +440,7 @@ test('/users/{id} with id= {"role": "admin", "firstName": "Alex", "age": 34}', f
 
 // Label style tests
 
-test('/users/{.id*} with id=5', function (t) {
+test('Path: /users/{.id*} with id=5', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -454,7 +454,7 @@ test('/users/{.id*} with id=5', function (t) {
   t.end();
 });
 
-test('/users/{.id*} with id=[3,4,5]', function (t) {
+test('Path: /users/{.id*} with id=[3,4,5]', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -468,7 +468,7 @@ test('/users/{.id*} with id=[3,4,5]', function (t) {
   t.end();
 });
 
-test('/users/{.id*} with id= {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
+test('Path: /users/{.id*} with id= {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -486,7 +486,7 @@ test('/users/{.id*} with id= {"role": "admin", "firstName": "Alex", "age": 34}',
   t.end();
 });
 
-test('/users/{.id} with id=5', function (t) {
+test('Path: /users/{.id} with id=5', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -500,7 +500,7 @@ test('/users/{.id} with id=5', function (t) {
   t.end();
 });
 
-test('/users/{.id} with id=[3,4,5]', function (t) {
+test('Path: /users/{.id} with id=[3,4,5]', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -514,7 +514,7 @@ test('/users/{.id} with id=[3,4,5]', function (t) {
   t.end();
 });
 
-test('/users/{.id} with id= {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
+test('Path: /users/{.id} with id= {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -534,7 +534,7 @@ test('/users/{.id} with id= {"role": "admin", "firstName": "Alex", "age": 34}', 
 
 // Matrix style tests
 
-test('/users/{;id*} with id=5', function (t) {
+test('Path: /users/{;id*} with id=5', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -548,7 +548,7 @@ test('/users/{;id*} with id=5', function (t) {
   t.end();
 });
 
-test('/users/{;id*} with id=[3,4,5]', function (t) {
+test('Path: /users/{;id*} with id=[3,4,5]', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -562,7 +562,7 @@ test('/users/{;id*} with id=[3,4,5]', function (t) {
   t.end();
 });
 
-test('/users/{;id*} with id= {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
+test('Path: /users/{;id*} with id= {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -580,7 +580,7 @@ test('/users/{;id*} with id= {"role": "admin", "firstName": "Alex", "age": 34}',
   t.end();
 });
 
-test('/users/{;id} with id=5', function (t) {
+test('Path: /users/{;id} with id=5', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -594,7 +594,7 @@ test('/users/{;id} with id=5', function (t) {
   t.end();
 });
 
-test('/users/{;id} with id=[3,4,5]', function (t) {
+test('Path: /users/{;id} with id=[3,4,5]', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -608,7 +608,7 @@ test('/users/{;id} with id=[3,4,5]', function (t) {
   t.end();
 });
 
-test('/users/{;id} with id= {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
+test('Path: /users/{;id} with id= {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -632,7 +632,7 @@ test('/users/{;id} with id= {"role": "admin", "firstName": "Alex", "age": 34}', 
 
 // Form Tests
 
-test('/users{?id*} with id= 5', function (t) {
+test('Query: /users{?id*} with id= 5', function (t) {
   const parameter = {
     name: 'id',
     in: 'query',
@@ -646,7 +646,7 @@ test('/users{?id*} with id= 5', function (t) {
   t.end();
 });
 
-test('/users{?id*} with id=[3,4,5]', function (t) {
+test('Query: /users{?id*} with id=[3,4,5]', function (t) {
   const parameter = {
     name: 'id',
     in: 'query',
@@ -664,7 +664,7 @@ test('/users{?id*} with id=[3,4,5]', function (t) {
   t.end();
 });
 
-test('/users{?id*} with id={"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
+test('Query: /users{?id*} with id={"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
   const parameter = {
     name: 'id',
     in: 'query',
@@ -686,7 +686,7 @@ test('/users{?id*} with id={"role": "admin", "firstName": "Alex", "age": 34}', f
   t.end();
 });
 
-test('/users{?id} with id= 5', function (t) {
+test('Query: /users{?id} with id= 5', function (t) {
   const parameter = {
     name: 'id',
     in: 'query',
@@ -700,7 +700,7 @@ test('/users{?id} with id= 5', function (t) {
   t.end();
 });
 
-test('/users{?id} with id=[3,4,5]', function (t) {
+test('Query: /users{?id} with id=[3,4,5]', function (t) {
   const parameter = {
     name: 'id',
     in: 'query',
@@ -714,7 +714,7 @@ test('/users{?id} with id=[3,4,5]', function (t) {
   t.end();
 });
 
-test('/users{?id} with id={"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
+test('Query: /users{?id} with id={"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
   const parameter = {
     name: 'id',
     in: 'query',
@@ -732,7 +732,7 @@ test('/users{?id} with id={"role": "admin", "firstName": "Alex", "age": 34}', fu
   t.end();
 });
 
-test('test that style and explode default correctly (to "form" and "true") when neither is specified for query', function (t) {
+test('Query: test that style and explode default correctly (to "form" and "true") when neither is specified for query', function (t) {
   const parameter = {
     name: 'id',
     in: 'query',
@@ -753,7 +753,7 @@ test('test that style and explode default correctly (to "form" and "true") when 
 // Space Delimited Tests
 // Note: There are less scenarios for this and no special URI Template
 
-test('/users{?id*} with id=[3,4,5], spaceDelimited', function (t) {
+test('Query: /users{?id*} with id=[3,4,5], spaceDelimited', function (t) {
   const parameter = {
     name: 'id',
     in: 'query',
@@ -771,7 +771,7 @@ test('/users{?id*} with id=[3,4,5], spaceDelimited', function (t) {
   t.end();
 });
 
-test('/users{?id} with id=[3,4,5], spaceDelimited', function (t) {
+test('Query: /users{?id} with id=[3,4,5], spaceDelimited', function (t) {
   const parameter = {
     name: 'id',
     in: 'query',
@@ -788,7 +788,7 @@ test('/users{?id} with id=[3,4,5], spaceDelimited', function (t) {
 // Pipe Delimited Tests
 // Note: There are less scenarios for this and no special URI Template
 
-test('/users{?id*} with id=[3,4,5], pipeDelimited', function (t) {
+test('Query: /users{?id*} with id=[3,4,5], pipeDelimited', function (t) {
   const parameter = {
     name: 'id',
     in: 'query',
@@ -806,7 +806,7 @@ test('/users{?id*} with id=[3,4,5], pipeDelimited', function (t) {
   t.end();
 });
 
-test('/users{?id} with id=[3,4,5], pipeDelimited', function (t) {
+test('Query: /users{?id} with id=[3,4,5], pipeDelimited', function (t) {
   const parameter = {
     name: 'id',
     in: 'query',
@@ -824,7 +824,7 @@ test('/users{?id} with id=[3,4,5], pipeDelimited', function (t) {
 // Spec doesn't say what to do if explode false. We just assume deepOject ignores explode
 // as no alternative serialization is defined when explode is false.
 
-test('deepObject with id={"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
+test('Query: deepObject with id={"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
   const parameter = {
     name: 'id',
     in: 'query',
@@ -844,6 +844,122 @@ test('deepObject with id={"role": "admin", "firstName": "Alex", "age": 34}', fun
       name: 'id[age]',
       value: '34',
     },
+  ];
+  const actual = createHarParameterObjects(parameter, {
+    role: 'admin',
+    firstName: 'Alex',
+    age: 34,
+  });
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+//// Header Parameters https://swagger.io/docs/specification/serialization/#header
+
+test('Header: {id} with X-MyHeader = 5', function (t) {
+  const parameter = {
+    name: 'X-MyHeader',
+    in: 'header',
+    style: 'simple',
+    explode: false,
+  };
+
+  const expected = [{ name: 'X-MyHeader', value: '5' }];
+  const actual = createHarParameterObjects(parameter, 5);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('Header: {id} with X-MyHeader = [3,4,5]', function (t) {
+  const parameter = {
+    name: 'X-MyHeader',
+    in: 'header',
+    style: 'simple',
+    explode: false,
+  };
+
+  const expected = [{ name: 'X-MyHeader', value: '3,4,5' }];
+  const actual = createHarParameterObjects(parameter, [3, 4, 5]);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('Header: {id} with X-MyHeader = {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
+  const parameter = {
+    name: 'X-MyHeader',
+    in: 'header',
+    style: 'simple',
+    explode: false,
+  };
+
+  const expected = [
+    { name: 'X-MyHeader', value: 'role,admin,firstName,Alex,age,34' },
+  ];
+  const actual = createHarParameterObjects(parameter, {
+    role: 'admin',
+    firstName: 'Alex',
+    age: 34,
+  });
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('Header: {id*} with X-MyHeader = 5', function (t) {
+  const parameter = {
+    name: 'X-MyHeader',
+    in: 'header',
+    style: 'simple',
+    explode: true,
+  };
+
+  const expected = [{ name: 'X-MyHeader', value: '5' }];
+  const actual = createHarParameterObjects(parameter, 5);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('Header: {id*} with X-MyHeader = [3,4,5]', function (t) {
+  const parameter = {
+    name: 'X-MyHeader',
+    in: 'header',
+    style: 'simple',
+    explode: true,
+  };
+
+  const expected = [{ name: 'X-MyHeader', value: '3,4,5' }];
+  const actual = createHarParameterObjects(parameter, [3, 4, 5]);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('Header: {id*} with X-MyHeader = {"role": "admin", "firstName": "Alex", "age": 34}', function (t) {
+  const parameter = {
+    name: 'X-MyHeader',
+    in: 'header',
+    style: 'simple',
+    explode: true,
+  };
+
+  const expected = [
+    { name: 'X-MyHeader', value: 'role=admin,firstName=Alex,age=34' },
+  ];
+  const actual = createHarParameterObjects(parameter, {
+    role: 'admin',
+    firstName: 'Alex',
+    age: 34,
+  });
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('Header: Test that style and explode default to simple/false when not provided', function (t) {
+  const parameter = {
+    name: 'X-MyHeader',
+    in: 'header',
+  };
+
+  const expected = [
+    { name: 'X-MyHeader', value: 'role,admin,firstName,Alex,age,34' },
   ];
   const actual = createHarParameterObjects(parameter, {
     role: 'admin',
