@@ -114,6 +114,55 @@ const getParamId = function (style, name) {
 };
 
 /**
+ * If `style` is undefined then get the default style for the location.
+ * @param {*} style
+ * @param {*} location
+ * @returns
+ */
+function getDefaultStyleForLocation(style, location) {
+  if (typeof style === 'undefined') {
+    if (location === 'path') {
+      style = 'simple';
+    } else if (location === 'query') {
+      style = 'form';
+    }
+  }
+  return style;
+}
+
+/**
+ * If `explode` is undefined then get the default value of `explode` for the given style.
+ * @param {*} explode
+ * @param {*} style
+ * @returns
+ */
+function getDefaultExplodeForStyle(explode, style) {
+  if (typeof explode === 'undefined') {
+    if (style === 'form') {
+      explode = true;
+    }
+  }
+  return explode;
+}
+
+/**
+ * Returns the correct array element separator for unexploded query parameters
+ * based on style. If style is spaceDelimited this returns `%20` (the encoded string for
+ * space character). If style is pipeDelimited this returns '|'; else it returns ','
+ * @param {*} style
+ * @returns
+ */
+function getArrayElementSeparator(style) {
+  let separator = ',';
+  if (style === 'spaceDelimited') {
+    separator = '%20';
+  } else if (style === 'pipeDelimited') {
+    separator = '|';
+  }
+  return separator;
+}
+
+/**
  * @typedef {object} HarParameterObject - An object that describes a parameter in a HAR
  * @property {string} name - The name of the parameter
  * @property {string} value - The value of the parameter
@@ -153,27 +202,11 @@ const createHarParameterObjects = function (
   }
 
   const objects = [];
-  if (typeof style === 'undefined') {
-    if (location === 'path') {
-      style = 'simple';
-    } else if (location === 'query') {
-      style = 'form';
-    }
-  }
-
-  if (typeof explode === 'undefined') {
-    if (style === 'form') {
-      explode = true;
-    }
-  }
+  style = getDefaultStyleForLocation(style, location);
+  explode = getDefaultExplodeForStyle(explode, style);
 
   if (location === 'query') {
-    let separator = ',';
-    if (style === 'spaceDelimited') {
-      separator = '%20';
-    } else if (style === 'pipeDelimited') {
-      separator = '|';
-    }
+    const separator = getArrayElementSeparator(style);
     if (Array.isArray(value)) {
       if (explode) {
         objects.push(
