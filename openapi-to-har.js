@@ -102,6 +102,18 @@ const getPrefix = function (style) {
 };
 
 /**
+ * Returns the separator character used between elements of a path parameter
+ * Returns '.' for label style, ';' for matrix style and ',' for all others
+ * @param {string} style
+ * @returns
+ */
+const getSeparator = function (style) {
+  if (style === 'label') return '.';
+  if (style === 'matrix') return ';';
+  return ',';
+};
+
+/**
  * Returns a "parameter identifier" used in matrix style path parameters. For all other styles
  * it returns ''
  * @param {string} style
@@ -156,7 +168,6 @@ function getArrayElementSeparator(style) {
  * Returns a string representation of `obj`. Each key value pair is separated by
  * a `keyValueSeparator` and each pair is separated by a `pairSeparator`.
  *
- * For example if `obj` = { firstName: 'Alex', age: 34 } and `pairSeparator` is
  * @param {*} obj
  * @param {*} keyValueSeparator
  * @param {*} pairSeparator
@@ -204,10 +215,11 @@ const createHarParameterObjects = function (
     throw 'Required parameters missing';
   }
 
+  const prefix = getPrefix(style);
+  const paramId = getParamId(style, name);
+
   if (isPrimitive(value)) {
-    return [
-      { name, value: getPrefix(style) + getParamId(style, name) + value },
-    ];
+    return [{ name, value: prefix + paramId + value }];
   }
 
   const objects = [];
@@ -247,18 +259,8 @@ const createHarParameterObjects = function (
       }
     }
   } else if (location === 'path' || location === 'header') {
-    let prefix = '';
-    let separator = ',';
-    let paramId = '';
+    const separator = getSeparator(style);
 
-    if (style === 'label') {
-      prefix = '.';
-      separator = '.';
-    } else if (style === 'matrix') {
-      prefix = `;`;
-      separator = ';';
-      paramId = `${name}=`;
-    }
     if (Array.isArray(value)) {
       objects.push({
         name,
