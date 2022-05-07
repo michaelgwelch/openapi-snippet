@@ -232,6 +232,8 @@ const createHarParameterObjects = function (
     } else {
       objects.push({ name, value: value + '' });
     }
+  } else {
+    objects.push({ name, value });
   }
 
   return objects;
