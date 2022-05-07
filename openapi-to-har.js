@@ -165,7 +165,7 @@ const createHarParameterObjects = function (
     } else {
       objects.push({ name, value: value + '' });
     }
-  } else if (location === 'path') {
+  } else if (location === 'path' || location === 'header') {
     let prefix = '';
     let separator = ',';
     let paramId = '';
@@ -210,27 +210,6 @@ const createHarParameterObjects = function (
       }
     } else {
       objects.push({ name, value: prefix + paramId + value + '' });
-    }
-  } else if (location === 'header') {
-    if (!Array.isArray(value) && value && typeof value === 'object') {
-      if (explode) {
-        objects.push({
-          name,
-          value:
-            prefix +
-            Object.keys(value)
-              .map((key) => `${key}=${value[key]}`)
-              .join(separator) +
-            '',
-        });
-      } else {
-        objects.push({
-          name,
-          value: Object.keys(value).map((key) => `${key},${value[key]}`) + '',
-        });
-      }
-    } else {
-      objects.push({ name, value: value + '' });
     }
   } else {
     objects.push({ name, value });
