@@ -125,6 +125,10 @@ const createHarParameterObjects = function (
   }
 
   if (location === 'query') {
+    let separator = ',';
+    if (style === 'spaceDelimited') {
+      separator = '%20';
+    }
     if (Array.isArray(value)) {
       if (explode) {
         objects.push(
@@ -133,7 +137,7 @@ const createHarParameterObjects = function (
           })
         );
       } else {
-        objects.push({ name, value: value + '' });
+        objects.push({ name, value: value.join(separator) });
       }
     } else if (value && typeof value === 'object') {
       if (explode) {

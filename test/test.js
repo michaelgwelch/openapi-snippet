@@ -622,6 +622,8 @@ test('/users/{;id} with id= {"role": "admin", "firstName": "Alex"}', function (t
 
 //// Query Parameters: Test cases from https://swagger.io/docs/specification/serialization/#query
 
+// Form Tests
+
 test('/users{?id*} with id= 5', function (t) {
   const parameter = {
     name: 'id',
@@ -720,5 +722,40 @@ test('/users{?id} with id={"role": "admin", "firstName": "Alex"}', function (t) 
 });
 
 test('TODO: Test that style and explode default correctly', function (t) {
+  t.end();
+});
+
+// Space Delimited Tests
+// Note: There are less scenarios for this and no special URI Template
+
+test('/users{?id*} with id=[3,4,5], spaceDelimited', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'query',
+    style: 'spaceDelimited',
+    explode: true,
+  };
+
+  const expected = [
+    { name: 'id', value: '3' },
+    { name: 'id', value: '4' },
+    { name: 'id', value: '5' },
+  ];
+  const actual = createHarParameterObjects(parameter, [3, 4, 5]);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users{?id} with id=[3,4,5], spaceDelimited', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'query',
+    style: 'spaceDelimited',
+    explode: false,
+  };
+
+  const expected = [{ name: 'id', value: '3%204%205' }];
+  const actual = createHarParameterObjects(parameter, [3, 4, 5]);
+  t.deepEqual(actual, expected);
   t.end();
 });
