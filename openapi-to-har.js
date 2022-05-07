@@ -125,18 +125,29 @@ const createHarParameterObjects = function (
   }
 
   if (location === 'query') {
-    if (Array.isArray(value) && explode) {
-      objects.push(
-        ...value.map((entry) => {
-          return { name, value: entry + '' };
-        })
-      );
+    if (Array.isArray(value)) {
+      if (explode) {
+        objects.push(
+          ...value.map((entry) => {
+            return { name, value: entry + '' };
+          })
+        );
+      } else {
+        objects.push({ name, value: value + '' });
+      }
     } else if (value && typeof value === 'object') {
-      objects.push(
-        ...Object.keys(value).map((key) => {
-          return { name: key, value: value[key] };
-        })
-      );
+      if (explode) {
+        objects.push(
+          ...Object.keys(value).map((key) => {
+            return { name: key, value: value[key] };
+          })
+        );
+      } else {
+        objects.push({
+          name,
+          value: Object.keys(value).map((key) => `${key},${value[key]}`) + '',
+        });
+      }
     } else {
       objects.push({ name, value: value + '' });
     }

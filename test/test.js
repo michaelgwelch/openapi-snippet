@@ -674,6 +674,51 @@ test('/users{?id*} with id={"role": "admin", "firstName": "Alex"}', function (t)
   t.end();
 });
 
+test('/users{?id} with id= 5', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'query',
+    style: 'form',
+    explode: false,
+  };
+
+  const expected = [{ name: 'id', value: '5' }];
+  const actual = createHarParameterObjects(parameter, 5);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users{?id} with id=[3,4,5]', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'query',
+    style: 'form',
+    explode: false,
+  };
+
+  const expected = [{ name: 'id', value: '3,4,5' }];
+  const actual = createHarParameterObjects(parameter, [3, 4, 5]);
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
+test('/users{?id} with id={"role": "admin", "firstName": "Alex"}', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'query',
+    style: 'form',
+    explode: false,
+  };
+
+  const expected = [{ name: 'id', value: 'role,admin,firstName,Alex' }];
+  const actual = createHarParameterObjects(parameter, {
+    role: 'admin',
+    firstName: 'Alex',
+  });
+  t.deepEqual(actual, expected);
+  t.end();
+});
+
 test('TODO: Test that style and explode default correctly', function (t) {
   t.end();
 });
