@@ -103,6 +103,14 @@ const createHarParameterObjects = function (
   { name, in: location, style, explode },
   value
 ) {
+  if (
+    typeof name === 'undefined' ||
+    typeof location === 'undefined' ||
+    typeof value === 'undefined'
+  ) {
+    throw 'Required parameters missing';
+  }
+
   const objects = [];
   if (typeof style === 'undefined') {
     if (location === 'path') {
@@ -116,7 +124,23 @@ const createHarParameterObjects = function (
     }
   }
 
-  if (location === 'path') {
+  if (location === 'query') {
+    if (Array.isArray(value) && explode) {
+      objects.push(
+        ...value.map((entry) => {
+          return { name, value: entry + '' };
+        })
+      );
+    } else if (value && typeof value === 'object') {
+      objects.push(
+        ...Object.keys(value).map((key) => {
+          return { name: key, value: value[key] };
+        })
+      );
+    } else {
+      objects.push({ name, value: value + '' });
+    }
+  } else if (location === 'path') {
     let prefix = '';
     let separator = ',';
     let paramId = '';
