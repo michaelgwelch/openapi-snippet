@@ -153,6 +153,25 @@ function getArrayElementSeparator(style) {
 }
 
 /**
+ * Returns a string representation of `obj`. Each key value pair is separated by
+ * a `keyValueSeparator` and each pair is separated by a `pairSeparator`.
+ *
+ * For example if `obj` = { firstName: 'Alex', age: 34 } and `pairSeparator` is
+ * @param {*} obj
+ * @param {*} keyValueSeparator
+ * @param {*} pairSeparator
+ * @example
+ * // returns "firstName=Alex,age=34"
+ * objectJoin({ firstName: 'Alex', age: 34 }, '=', ',')
+ * @returns
+ */
+function objectJoin(obj, keyValueSeparator = ',', pairSeparator = ',') {
+  return Object.entries(obj)
+    .map(([k, v]) => `${k}${keyValueSeparator}${v}`)
+    .join(pairSeparator);
+}
+
+/**
  * @typedef {object} HarParameterObject - An object that describes a parameter in a HAR
  * @property {string} name - The name of the parameter
  * @property {string} value - The value of the parameter
@@ -223,7 +242,7 @@ const createHarParameterObjects = function (
       } else {
         objects.push({
           name,
-          value: Object.entries(value).map(([k, v]) => `${k},${v}`) + '',
+          value: objectJoin(value),
         });
       }
     }
@@ -250,19 +269,12 @@ const createHarParameterObjects = function (
       if (explode) {
         objects.push({
           name,
-          value:
-            prefix +
-            Object.entries(value)
-              .map(([k, v]) => `${k}=${v}`)
-              .join(separator),
+          value: prefix + objectJoin(value, '=', separator),
         });
       } else {
         objects.push({
           name,
-          value:
-            prefix +
-            paramId +
-            Object.entries(value).map(([k, v]) => `${k},${v}`),
+          value: prefix + paramId + objectJoin(value),
         });
       }
     }
