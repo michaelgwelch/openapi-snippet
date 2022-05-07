@@ -332,7 +332,7 @@ test('Testing the application/x-www-form-urlencoded example case', function (t) 
 
 // First a set of path parameter tests from here: https://swagger.io/docs/specification/serialization/#path
 
-test('test that style and explode default correctly (to "simple" and "false") when neither is specified', function (t) {
+test('test that style and explode default correctly (to "simple" and "false") when neither is specified for path', function (t) {
   const parameter = {
     name: 'id',
     in: 'path',
@@ -732,7 +732,21 @@ test('/users{?id} with id={"role": "admin", "firstName": "Alex", "age": 34}', fu
   t.end();
 });
 
-test('TODO: Test that style and explode default correctly', function (t) {
+test('test that style and explode default correctly (to "form" and "true") when neither is specified for query', function (t) {
+  const parameter = {
+    name: 'id',
+    in: 'query',
+  };
+
+  const expected = [
+    { name: 'firstName', value: 'Alex' },
+    { name: 'age', value: '34' },
+  ];
+  const actual = createHarParameterObjects(parameter, {
+    firstName: 'Alex',
+    age: 34,
+  });
+  t.deepEqual(actual, expected);
   t.end();
 });
 

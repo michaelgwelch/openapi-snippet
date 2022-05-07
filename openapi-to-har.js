@@ -115,10 +115,12 @@ const createHarParameterObjects = function (
   if (typeof style === 'undefined') {
     if (location === 'path') {
       style = 'simple';
+    } else if (location === 'query') {
+      style = 'form';
     }
   }
 
-  if (typeof explode === undefined) {
+  if (typeof explode === 'undefined') {
     if (style === 'form') {
       explode = true;
     }
