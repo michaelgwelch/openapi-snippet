@@ -75,6 +75,45 @@ const createHar = function (openApi, path, method, queryParamValues) {
 };
 
 /**
+ * Tests `value` to see if it is a primitive.
+ * @param {*} value - The value to test
+ * @returns {boolean} - `true` if `value` is a primitive, `false` otherwise
+ */
+const isPrimitive = function (value) {
+  if (value === null) return true;
+  const valueType = typeof value;
+  if (valueType === 'function' || valueType === 'object') return false;
+  return true;
+};
+
+/**
+ * Returns a string that is used as a prefix before a value in a path parameter
+ * @param {string} style
+ * @returns {string} - Returns `.` for label style and `;` for matrix style. Returns '' for any other input.
+ */
+const getPrefix = function (style) {
+  if (style === 'label') {
+    return '.';
+  }
+  if (style === 'matrix') {
+    return `;`;
+  }
+  return '';
+};
+
+/**
+ * Returns a "parameter identifier" used in matrix style path parameters. For all other styles
+ * it returns ''
+ * @param {string} style
+ * @param {string} name - The parameter name
+ * @returns {string} - The empty string if `style` is not `matrix`, else a string in the format `;{name}=`
+ */
+const getParamId = function (style, name) {
+  if (style === 'matrix') return `${name}=`;
+  return '';
+};
+
+/**
  * @typedef {object} HarParameterObject - An object that describes a parameter in a HAR
  * @property {string} name - The name of the parameter
  * @property {string} value - The value of the parameter
@@ -103,12 +142,14 @@ const createHarParameterObjects = function (
   { name, in: location, style, explode },
   value
 ) {
-  if (
-    typeof name === 'undefined' ||
-    typeof location === 'undefined' ||
-    typeof value === 'undefined'
-  ) {
+  if (!name || !location || typeof value === 'undefined') {
     throw 'Required parameters missing';
+  }
+
+  if (isPrimitive(value)) {
+    return [
+      { name, value: getPrefix(style) + getParamId(style, name) + value },
+    ];
   }
 
   const objects = [];
@@ -162,8 +203,6 @@ const createHarParameterObjects = function (
           value: Object.keys(value).map((key) => `${key},${value[key]}`) + '',
         });
       }
-    } else {
-      objects.push({ name, value: value + '' });
     }
   } else if (location === 'path' || location === 'header') {
     let prefix = '';
@@ -179,14 +218,11 @@ const createHarParameterObjects = function (
       paramId = `${name}=`;
     }
     if (Array.isArray(value)) {
-      if (explode) {
-        objects.push({
-          name,
-          value: prefix + paramId + value.join(separator + paramId),
-        });
-      } else {
-        objects.push({ name, value: prefix + paramId + value + '' });
-      }
+      objects.push({
+        name,
+        value:
+          prefix + paramId + value.join(explode ? separator + paramId : ','),
+      });
     } else if (value && typeof value === 'object') {
       if (explode) {
         objects.push({
@@ -208,8 +244,6 @@ const createHarParameterObjects = function (
             '',
         });
       }
-    } else {
-      objects.push({ name, value: prefix + paramId + value + '' });
     }
   } else {
     objects.push({ name, value });
