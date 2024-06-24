@@ -219,6 +219,21 @@ test('Generate snippet with multipart/form-data', function (t) {
   t.end();
 });
 
+test('If a server has url with variables those should be substituted', function (t) {
+  const result = OpenAPISnippets.getEndpointSnippets(
+    FormDataExampleReferenceAPI,
+    '/pets',
+    'patch',
+    ['csharp_restsharp']
+  );
+  const snippet = result.snippets[0].content;
+  t.true(
+    /new RestClient\("http:\/\/petstore.swagger.io\/api\/pets"/.test(snippet)
+  );
+  t.false(/{hostname}/.test(snippet));
+  t.end();
+});
+
 test('Generate snippet with multipart/form-data with array', function (t) {
   const result = OpenAPISnippets.getEndpointSnippets(
     FormDataExampleReferenceAPI,

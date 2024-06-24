@@ -410,6 +410,17 @@ const getBaseUrl = function (openApi, path, method) {
   if (openApi.paths[path][method].servers)
     return openApi.paths[path][method].servers[0].url;
   if (openApi.paths[path].servers) return openApi.paths[path].servers[0].url;
+
+  if (openApi.servers && openApi.servers.length > 0) {
+    let firstServer = openApi.servers[0];
+    let url = firstServer.url;
+    const variables = firstServer.variables || {};
+    Object.keys(variables).forEach((variable) => {
+      url = url.replace(`{${variable}}`, variables[variable].default);
+    });
+    return url;
+  }
+
   if (openApi.servers) return openApi.servers[0].url;
 
   let baseUrl = '';
